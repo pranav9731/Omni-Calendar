@@ -1,2 +1,2 @@
-# Omni-Calender
-A Calender that does it all
+# Omni-Calendar
+A Calendar that does it all
