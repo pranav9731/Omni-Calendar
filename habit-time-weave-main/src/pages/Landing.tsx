@@ -157,9 +157,9 @@ const Landing = ({ onGetStarted }: LandingProps) => {
   ];
 
   const stats = [
-    { label: "Time Saved Daily", value: "2.5h", icon: Clock },
-    { label: "Task Completion", value: "94%", icon: Target },
-    { label: "User Satisfaction", value: "4.9★", icon: Star }
+    { label: "Time Saved Daily", value: "8h", icon: Clock },
+    { label: "Task Completion", value: "90%", icon: Target },
+    { label: "User Satisfaction", value: "4.8★", icon: Star }
   ];
 
   return (

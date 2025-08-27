@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Calendar from './pages/MainCalendar';
-import MainCalendar from './pages/MainCalendar';
 
 export const AppRouter = () => {
     const navigate = useNavigate();

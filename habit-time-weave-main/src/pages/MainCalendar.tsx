@@ -32,6 +32,7 @@ import {
   ArrowRight,
   LogOut
 } from "lucide-react";
+import { userInfo } from "os";
 
 interface MainCalendarProps {
   onBackToLogin: () => void;
@@ -100,6 +101,20 @@ const MainCalendar = ({ onBackToLogin }: MainCalendarProps) => {
     productivity: 87
   };
 
+  const [tasks, setTasks] = useState<string[]>([]);
+  const [input, setInput] = useState("");
+
+  const addTask = () => {
+    const trimmed = input.trim();
+    if (!trimmed) return;
+    setTasks([...tasks, trimmed]);
+    setInput("");
+  };
+
+  const removeTask = (index: number) => {
+    setTasks(tasks.filter((_, i) => i !== index));
+  };
+
   const upcomingEvents = mockEvents.slice(0, 2);
   const currentQuote = quotes[Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % quotes.length];
 
@@ -116,11 +131,11 @@ const MainCalendar = ({ onBackToLogin }: MainCalendarProps) => {
           <div className="flex items-center gap-4 sm:gap-6">
             <div className="flex items-center gap-4">
               <Avatar className="h-12 w-12 ring-2 ring-primary/20">
-                <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400" />
+                <AvatarImage src="https://picsum.photos/200" />
                 <AvatarFallback>JD</AvatarFallback>
               </Avatar>
               <div>
-                <h1 className="text-3xl sm:text-4xl font-bold gradient-text">Welcome back, John!</h1>
+                <h1 className="text-3xl sm:text-4xl font-bold gradient-text">Welcome back, User!</h1>
                 <p className="text-base sm:text-lg text-muted-foreground italic">"{currentQuote}"</p>
               </div>
             </div>
@@ -141,11 +156,12 @@ const MainCalendar = ({ onBackToLogin }: MainCalendarProps) => {
             </Button>
             <Button size="sm" variant="outline" className="glass-button gap-2 whitespace-nowrap">
               <Zap className="h-4 w-4" />
-              <span className="hidden sm:inline">AI Suggest</span>
+              <span className="hidden sm:inline"> <abbr title="Coming Soon" className="no-underline border-none"> AI Suggest </abbr></span>
             </Button>
-            <Button className="gap-2 shadow-elegant hover:shadow-glow transition-all group whitespace-nowrap px-3 py-2 sm:px-4">
+            <Button onClick={addTask} className="gap-2 shadow-elegant hover:shadow-glow transition-all group whitespace-nowrap px-3 py-2 sm:px-4">
               <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform" />
-              <span className="hidden sm:inline">New Event</span>
+              <span className="hidden sm:inline" >New Event </span>
+              
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -292,6 +308,40 @@ const MainCalendar = ({ onBackToLogin }: MainCalendarProps) => {
                 );
               })}
             </div>
+            {/* To-Do List Section */}
+            <Card className="glass-card p-4 sm:p-6 lg:p-8 shadow-elegant animate-fade-in-up transition-all duration-500">
+              <h2 className="text-2xl font-bold gradient-text mb-4">📝 Events (Ongoing)</h2>
+              <div className="space-y-4">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Add a task..."
+                    className="flex-grow px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  />
+                  <Button onClick={addTask} className="px-4 py-2 bg-primary text-white rounded-md hover:shadow-glow">
+                    Add
+                  </Button>
+                </div>
+                <ul className="space-y-2">
+                  {tasks.map((task, index) => (
+                    <li
+                      key={index}
+                      className="flex justify-between items-center p-3 border rounded-md hover:shadow-sm transition"
+                    >
+                      <span className="text-muted-foreground">{task}</span>
+                      <button
+                        onClick={() => removeTask(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        ✖
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Card>
           </div>
 
           {/* Sidebar */}
@@ -507,9 +557,20 @@ const MainCalendar = ({ onBackToLogin }: MainCalendarProps) => {
                 &copy; 2025 FSD Group 10. All rights reserved.
               </p>
               <div className="flex gap-6 mt-4 md:mt-0">
-                <a href="#" className="text-slate-400 hover:text-primary text-sm transition-colors">Privacy Policy</a>
-                <a href="#" className="text-slate-400 hover:text-primary text-sm transition-colors">Terms of Service</a>
-                <a href="#" className="text-slate-400 hover:text-primary text-sm transition-colors">Cookie Policy</a>
+                <a href="omnicaltnc.html"
+                  className="text-slate-400 hover:text-primary text-sm transition-colors hover:underline cursor-pointer"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  Privacy Policy</a>
+                <a href="omnicaltnc.html"
+                  className="text-slate-400 hover:text-primary text-sm transition-colors hover:underline cursor-pointer"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  Terms of Service</a>
+                <a href="omnicaltnc.html"
+                  className="text-slate-400 hover:text-primary text-sm transition-colors hover:underline cursor-pointer"
+                  target="_blank"
+                  rel="noopener noreferrer">Cookie Policy</a>
               </div>
             </div>
           </div>

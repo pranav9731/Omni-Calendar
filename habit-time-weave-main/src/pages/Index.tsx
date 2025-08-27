@@ -32,7 +32,8 @@ const Index = () => {
         )}
         {currentPage === 'login' && (
           <div className="animate-fade-in">
-            <Login onLoginSuccess={handleLoginSuccess} onBackToLanding={handleBackToLanding} />
+            <Login onLoginSuccess={handleLoginSuccess} onBackToLanding={handleBackToLanding}
+             />
           </div>
         )}
         {currentPage === 'main' && (

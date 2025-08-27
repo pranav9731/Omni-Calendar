@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import MainCalendar from "./pages/MainCalendar";
 import NotFound from "./pages/NotFound";
+import { AppRouter } from "./AppRouter";
 
 const queryClient = new QueryClient();
 
@@ -18,7 +19,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          
+              <Route path="/api" element={<AppRouter />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
