@@ -49,65 +49,72 @@ const authenticateToken = (req, res, next) => {
 
 // Signup route
 app.post('/api/signup', async (req, res) => {
-  const { name, email, password } = req.body;
-  
+  const { name, email, password } = req.body || {};
+
   // Log the received data (remove in production)
   console.log('Received signup request:', {
     name,
     email,
     password: '***hidden***'
   });
-  
+
   try {
-    // Validate input
-    if (!name || !email || !password) {
-      console.log('Missing required fields');
-      return res.status(400).json({ 
-        message: 'All fields are required' 
-      });
+    // Validate input presence and types
+    if (
+      typeof name !== 'string' ||
+      typeof email !== 'string' ||
+      typeof password !== 'string' ||
+      !name.trim() || !email.trim() || !password
+    ) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedName = name.trim();
+
+    // Basic email format check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(normalizedEmail)) {
+      return res.status(400).json({ message: 'Invalid email address' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters' });
     }
 
     // Check if user already exists
-    if (users.find(u => u.email === email)) {
-      console.log('User already exists:', email);
-      return res.status(400).json({ 
-        message: 'User already exists' 
-      });
+    if (users.find(u => u.email === normalizedEmail)) {
+      return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    
+    // Hash password (guard against unexpected errors)
+    let hashedPassword;
+    try {
+      hashedPassword = await bcrypt.hash(password, 10);
+    } catch (hashError) {
+      console.error('Password hash failed:', hashError);
+      return res.status(500).json({ message: 'Failed to secure password' });
+    }
+
     // Create new user
     const user = {
       id: users.length + 1,
-      name,
-      email,
+      name: normalizedName,
+      email: normalizedEmail,
       password: hashedPassword
     };
-    
+
     users.push(user);
-    
-    // Log success (remove in production)
-    console.log('User created successfully:', {
-      id: user.id,
-      email: user.email
-    });
-    
-    res.status(201).json({ 
+
+    console.log('User created successfully:', { id: user.id, email: user.email });
+
+    res.status(201).json({
       message: 'User created successfully',
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email
-      }
+      user: { id: user.id, name: user.name, email: user.email }
     });
   } catch (error) {
     console.error('Signup error:', error);
-    res.status(500).json({ 
-      message: 'Server error',
-      error: error.message 
-    });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

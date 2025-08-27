@@ -27,7 +27,7 @@ const Login = ({ onLoginSuccess, onBackToLanding }: LoginProps) => {
   const password = formData.get('password') as string;
   
   try {
-    const response = await fetch('http://localhost:8080/api/login', {
+    const response = await fetch('/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -87,8 +87,7 @@ const Login = ({ onLoginSuccess, onBackToLanding }: LoginProps) => {
   }
 
   try {
-    // Make API request
-    const response = await fetch('http://localhost:8080/api/signup', {
+    const response = await fetch('/api/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -99,36 +98,30 @@ const Login = ({ onLoginSuccess, onBackToLanding }: LoginProps) => {
         password
       }),
     });
-    // Get response text and parse JSON once
-    const responseText = await response.text();
-    console.log('Server response:', responseText);
 
-    const handleSignup = async () => {
-  try {
-    const response = await fetch('/api/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password }),
-    });
-
-    let data;
-
+    let data: any = null;
     try {
       data = await response.json();
     } catch (parseError) {
-      console.error('Failed to parse server response:', parseError);
-      throw new Error('Server returned invalid response');
+      // Non-JSON response from server
     }
 
     if (!response.ok) {
       throw new Error(data?.message || 'Signup failed');
     }
 
-    // handle success (e.g., navigate to dashboard)
+    toast({
+      title: 'Account created',
+      description: 'You can now sign in with your credentials.',
+    });
+    setActiveTab('login');
   } catch (error) {
-    console.error('Signup error:',error);
-}
-};
+    console.error('Signup error:', error);
+    toast({
+      title: 'Error',
+      description: error instanceof Error ? error.message : 'Signup failed',
+      variant: 'destructive',
+    });
   } finally {
     setIsLoading(false);
   }
