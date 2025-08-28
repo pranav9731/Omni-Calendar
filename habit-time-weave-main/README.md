@@ -1,26 +1,8 @@
 Backend:
 
-    Weather Report (Completed)
-    Schedule Meeting
-    Login Page (Sign-In/Sign-Up)
-
-Viva:
-25 marks    Frontend (Why react/vite/tailwind, how, what technologia)
-25 marks    Backend (database, middleware, moongoose, JWT tokens, npm init, routing, .env files, config, api, json)
-20 marks    Explaination ()
-10 marks    Presentation (2 slides each person)
-20 marks    Viva
-
-Grace:
-Github Pull/Push (5)
-Code Explaination (5)
-
-More Questions
-CRUD
-API calls
-"/" roots
-DBMS vs RDBMS
-
+    Weather Report (Status: Completed)
+    Schedule Meeting (Status: Completed)
+    Login Page/Sign-In/Sign-Up ((Status: Completed)
 
 Follow these steps:
 
